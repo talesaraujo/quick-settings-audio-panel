@@ -774,7 +774,7 @@ export const ApplicationsMixerToggle = GObject.registerClass(
 				// The background apps toggle looks like a flat menu, but doesn't
 				// have a separate menu button. Fake it with an arrow icon.
 				icon_name: "go-next-symbolic",
-				title: "Applications emitting sound",
+				title: _("Applications emitting sound"),
 			});
 
 			this.add_style_class_name("background-apps-quick-toggle");

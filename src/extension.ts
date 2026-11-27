@@ -42,6 +42,7 @@ import { update_settings } from "./libs/preferences.js";
 import { cleanup_idle_ids, get_pactl_path, spawn, wait_property } from "./libs/utils.js";
 import {
 	ApplicationsMixer,
+	ApplicationsMixerSliderButton,
 	ApplicationsMixerToggle,
 	AudioProfileSwitcher,
 	BalanceSlider,
@@ -307,6 +308,13 @@ export default class QSAP extends Extension {
 			this._applications_mixer_combined = null;
 		}
 
+		if (this._applications_mixer_button) {
+			this._applications_mixer_button_panel.removeItem(this._applications_mixer_button);
+			this._applications_mixer_button.destroy();
+			this._applications_mixer_button = null;
+			this._applications_mixer_button_panel = null;
+		}
+
 		if (this._media_section) {
 			this._panel.removeItem(this._media_section);
 			this._media_section = null;
@@ -367,7 +375,21 @@ export default class QSAP extends Extension {
 
 	_create_app_mixer(index: number, group: boolean, filter_mode, filters) {
 		const combine = this.settings.get_boolean("combine-applications-volume-sliders");
-		if (group) {
+		if (group && this.settings.get_boolean("applications-volume-sliders-submenu-button")) {
+			this._applications_mixer_button = new ApplicationsMixerSliderButton(
+				OutputVolumeSlider,
+				this.settings,
+				filter_mode,
+				filters,
+				combine,
+			);
+			// The menu must live in the same panel as the output slider, since it's anchored to it.
+			// The item itself is invisible, so its position doesn't matter.
+			this._applications_mixer_button_panel = this.settings.get_boolean("move-output-volume-slider")
+				? this._panel
+				: LibPanel.main_panel;
+			this._applications_mixer_button_panel.addItem(this._applications_mixer_button, 2);
+		} else if (group) {
 			this._applications_mixer_combined = new ApplicationsMixerToggle(
 				this.settings,
 				filter_mode,
@@ -449,6 +471,9 @@ export default class QSAP extends Extension {
 		box.remove_child(sliderBin);
 		const menu_button_visible = slider._menuButton.visible;
 		box.remove_child(slider._menuButton);
+		const apps_button = slider._qsap_applications_button;
+		const apps_button_visible = apps_button?.visible;
+		if (apps_button) box.remove_child(apps_button);
 
 		const vbox = new St.BoxLayout({
 			orientation: Clutter.Orientation.VERTICAL,
@@ -458,6 +483,10 @@ export default class QSAP extends Extension {
 
 		const hbox = new St.BoxLayout();
 		hbox.add_child(sliderBin);
+		if (apps_button) {
+			hbox.add_child(apps_button);
+			apps_button.visible = apps_button_visible;
+		}
 		hbox.add_child(slider._menuButton);
 		slider._menuButton.visible = menu_button_visible; // we need to reset `actor.visible` when changing parent
 		// this prevent the tall panel bug when the button is shown
@@ -502,11 +531,19 @@ export default class QSAP extends Extension {
 		const hbox = vbox.get_children()[1];
 		const sliderBin = hbox.get_children()[0];
 
+		const apps_button = slider._qsap_applications_button;
+		const apps_button_visible = apps_button?.visible;
+
 		box.remove_child(vbox);
 		hbox.remove_child(sliderBin);
 		hbox.remove_child(slider._menuButton);
+		if (apps_button) hbox.remove_child(apps_button);
 
 		box.add_child(sliderBin);
+		if (apps_button) {
+			box.add_child(apps_button);
+			apps_button.visible = apps_button_visible;
+		}
 		box.add_child(slider._menuButton);
 
 		// we need to reset `actor.visible` when changing parent

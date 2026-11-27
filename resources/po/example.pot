@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-27 11:00-0300\n"
+"POT-Creation-Date: 2026-11-27 11:02-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: dist/extension.js:378
+#: dist/extension.js:409
 msgid "Reset all applications to default output"
 msgstr ""
 
@@ -151,189 +151,199 @@ msgid ""
 msgstr ""
 
 #: dist/prefs.js:106
-msgid "Combine streams from the same application"
+msgid "Open the submenu from the output volume slider"
 msgstr ""
 
 #: dist/prefs.js:107
+msgid ""
+"Instead of a separate item, add a button next to the output device chooser "
+"to open the submenu"
+msgstr ""
+
+#: dist/prefs.js:111
+msgid "Combine streams from the same application"
+msgstr ""
+
+#: dist/prefs.js:112
 msgid ""
 "Show one slider for an application with multiple audio streams. Volume and "
 "mute changes apply to every stream."
 msgstr ""
 
-#: dist/prefs.js:110
+#: dist/prefs.js:115
 msgid "Allow automatic execution of <tt>pactl</tt>"
 msgstr ""
 
-#: dist/prefs.js:111
+#: dist/prefs.js:116
 msgid ""
 "This feature might cause some minor lag, but it's necessary to get the real "
 "name of Chromium applications and detect the application's current output "
 "device"
 msgstr ""
 
-#: dist/prefs.js:115
+#: dist/prefs.js:120
 msgid "Elements order"
 msgstr ""
 
-#: dist/prefs.js:116
+#: dist/prefs.js:121
 msgid "Reorder elements in the new panel"
 msgstr ""
 
-#: dist/prefs.js:120
+#: dist/prefs.js:125
 msgid "Profile switcher"
 msgstr ""
 
-#: dist/prefs.js:121
+#: dist/prefs.js:126
 msgid "Allows you to quickly change the audio profile of the current device"
 msgstr ""
 
-#: dist/prefs.js:127
+#: dist/prefs.js:132
 msgid "Speaker / Headphone volume slider"
 msgstr ""
 
-#: dist/prefs.js:132
+#: dist/prefs.js:137
 msgid "Per-device volume sliders"
 msgstr ""
 
-#: dist/prefs.js:137
+#: dist/prefs.js:142
 msgid "Audio balance slider"
 msgstr ""
 
-#: dist/prefs.js:141
+#: dist/prefs.js:146
 msgid "Microphone volume slider"
 msgstr ""
 
-#: dist/prefs.js:145
+#: dist/prefs.js:150
 msgid "Media controls"
 msgstr ""
 
-#: dist/prefs.js:150
+#: dist/prefs.js:155
 msgid "Applications mixer"
 msgstr ""
 
-#: dist/prefs.js:157
+#: dist/prefs.js:162
 msgid "The same sliders you can find in pavucontrol or in the sound settings"
 msgstr ""
 
-#: dist/prefs.js:161
+#: dist/prefs.js:166
 msgid ""
 "<span color=\"darkorange\" weight=\"bold\"><tt>pactl</tt> was not found, you "
 "won't be able to change the output device per application</span>"
 msgstr ""
 
-#: dist/prefs.js:166
+#: dist/prefs.js:171
 msgid ""
 "This slider allows you to change the balance of the current audio output"
 msgstr ""
 
-#: dist/prefs.js:171 dist/prefs.js:182
+#: dist/prefs.js:176 dist/prefs.js:187
 msgid ""
 "<span color=\"red\" weight=\"bold\">This feature needs <tt>pactl</tt></span>"
 msgstr ""
 
-#: dist/prefs.js:177
+#: dist/prefs.js:182
 msgid "This include for example the echo cancellation module"
 msgstr ""
 
-#: dist/prefs.js:200
+#: dist/prefs.js:205
 msgid "Per-device sliders filtering"
 msgstr ""
 
-#: dist/prefs.js:201
+#: dist/prefs.js:206
 msgid ""
 "Allows you to filter the per-device volume sliders. The content of the "
 "filters are <b>regexes</b> and are applied to the device's display name and "
 "pulseaudio name."
 msgstr ""
 
-#: dist/prefs.js:202
+#: dist/prefs.js:207
 msgid "Device name"
 msgstr ""
 
-#: dist/prefs.js:206
+#: dist/prefs.js:211
 msgid "Application mixer filtering"
 msgstr ""
 
-#: dist/prefs.js:207
+#: dist/prefs.js:212
 msgid ""
 "Allows you to filter the applications that show up in the application mixer "
 "<b>using regexes</b>"
 msgstr ""
 
-#: dist/prefs.js:208
+#: dist/prefs.js:213
 msgid "Application name"
 msgstr ""
 
-#: dist/prefs.js:219
+#: dist/prefs.js:224
 msgid "Profile renamer"
 msgstr ""
 
-#: dist/prefs.js:220
+#: dist/prefs.js:225
 msgid ""
 "Allows you to rename profiles of audio devices (only effective in the "
 "profile switcher)"
 msgstr ""
 
-#: dist/prefs.js:242
+#: dist/prefs.js:247
 msgid "Restore original name"
 msgstr ""
 
-#: dist/prefs.js:261
+#: dist/prefs.js:266
 msgid "LibPanel settings"
 msgstr ""
 
-#: dist/prefs.js:262
+#: dist/prefs.js:267
 msgid ""
 "These settings are not specific to this extension, they apply to every panel"
 msgstr ""
 
-#: dist/prefs.js:265
+#: dist/prefs.js:270
 msgid "Lock panels"
 msgstr ""
 
-#: dist/prefs.js:266
+#: dist/prefs.js:271
 msgid "Prevent panels from being moved via drag and drop"
 msgstr ""
 
-#: dist/prefs.js:269
+#: dist/prefs.js:274
 msgid "Padding"
 msgstr ""
 
-#: dist/prefs.js:270
+#: dist/prefs.js:275
 msgid "Use this to override the default padding of the panels"
 msgstr ""
 
-#: dist/prefs.js:273
+#: dist/prefs.js:278
 msgid "Row spacing"
 msgstr ""
 
-#: dist/prefs.js:274
+#: dist/prefs.js:279
 msgid "Use this to override the default row spacing of the panels"
 msgstr ""
 
-#: dist/prefs.js:277
+#: dist/prefs.js:282
 msgid "Column spacing"
 msgstr ""
 
-#: dist/prefs.js:278
+#: dist/prefs.js:283
 msgid "Use this to override the default column spacing of the panels"
 msgstr ""
 
-#: dist/prefs.js:372
+#: dist/prefs.js:377
 msgid "Filtering mode"
 msgstr ""
 
-#: dist/prefs.js:373
+#: dist/prefs.js:378
 msgid ""
 "On blocklist mode, matching elements are removed from the list. On allowlist "
 "mode, only matching elements will be shown"
 msgstr ""
 
-#: dist/prefs.js:375
+#: dist/prefs.js:380
 msgid "Blocklist"
 msgstr ""
 
-#: dist/prefs.js:376
+#: dist/prefs.js:381
 msgid "Allowlist"
 msgstr ""
 
@@ -345,10 +355,10 @@ msgstr ""
 msgid "Applications emitting sound"
 msgstr ""
 
-#: dist/libs/widgets.js:580
+#: dist/libs/widgets.js:580 dist/libs/widgets.js:638 dist/libs/widgets.js:647
 msgid "Applications volumes"
 msgstr ""
 
-#: dist/libs/widgets.js:631
+#: dist/libs/widgets.js:704
 msgid "Output Device"
 msgstr ""

@@ -15,6 +15,7 @@ import {
 	PopupBaseMenuItem,
 	PopupImageMenuItem,
 	PopupMenuItem,
+	PopupMenuManager,
 	PopupMenuSection,
 } from "resource:///org/gnome/shell/ui/popupMenu.js";
 import {
@@ -774,7 +775,7 @@ export const ApplicationsMixerToggle = GObject.registerClass(
 				// The background apps toggle looks like a flat menu, but doesn't
 				// have a separate menu button. Fake it with an arrow icon.
 				icon_name: "go-next-symbolic",
-				title: "Applications emitting sound",
+				title: _("Applications emitting sound"),
 			});
 
 			this.add_style_class_name("background-apps-quick-toggle");
@@ -830,6 +831,109 @@ export const ApplicationsMixerToggle = GObject.registerClass(
 			this._slider_manager.destroy();
 			this.menu.disconnect(this._mosc_signal);
 			Main.sessionMode.disconnect(this._sm_updated_signal);
+
+			super.destroy();
+		}
+	},
+);
+
+// Same as `ApplicationsMixerToggle`, but the menu is opened by a button placed next to the device
+// chooser button of the main output slider, and appears right under that slider.
+//
+// This widget itself is never shown: it only exists so that the menu can be registered in a panel
+// with `panel.addItem`, exactly like the menu of any other quick settings item. It must be added
+// to the panel that contains the output slider, otherwise the menu will be misplaced.
+export const ApplicationsMixerSliderButton = GObject.registerClass(
+	class ApplicationsMixerSliderButton extends St.Widget {
+		public menu: any;
+		private _button: St.Button;
+		private _output_slider: Volume.OutputStreamSlider;
+		private _menu_manager: PopupMenuManager;
+		private _slider_manager: ApplicationsMixerManager;
+		private _slidersSection: PopupMenuSection;
+
+		constructor(
+			output_slider: Volume.OutputStreamSlider,
+			settings: Gio.Settings,
+			filter_mode: string,
+			filters: string[],
+			combine_streams: boolean,
+		) {
+			super({ visible: false });
+			this._output_slider = output_slider;
+
+			// `QuickToggleMenu` isn't exported, so reuse the class of the slider's own menu.
+			// Using the slider as the source actor anchors the menu right under it.
+			const QuickToggleMenu = output_slider.menu.constructor as any;
+			this.menu = new QuickToggleMenu(output_slider);
+			this.menu.actor.hide();
+			this.menu.setHeader("audio-volume-high-symbolic", _("Applications volumes"));
+			this._slidersSection = new PopupMenuSection();
+			this.menu.addMenuItem(this._slidersSection);
+			this.menu.connectObject("open-state-changed", () => this._syncVisibility(), this);
+
+			this._menu_manager = new PopupMenuManager(this);
+			this._menu_manager.addMenu(this.menu);
+
+			this._button = new St.Button({
+				child: new St.Icon({ icon_name: "view-app-grid-symbolic" }),
+				style_class: "icon-button flat",
+				accessible_name: _("Applications volumes"),
+				can_focus: true,
+				x_expand: false,
+				y_expand: false,
+				visible: false,
+			});
+			this._button.connect("clicked", () => this.menu.open());
+			// Put the button just before the device chooser button. This also works when the
+			// slider was modified to show the current device, since we insert relative to it.
+			const menu_button = output_slider._menuButton;
+			menu_button.get_parent()!.insert_child_below(this._button, menu_button);
+			// Let `_patch_show_current_device` find the button
+			output_slider._qsap_applications_button = this._button;
+
+			Main.sessionMode.connectObject("updated", () => this._syncVisibility(), this);
+
+			this._slider_manager = new ApplicationsMixerManager(
+				settings,
+				filter_mode,
+				filters,
+				combine_streams,
+				this._slider_added.bind(this),
+				this._slider_removed.bind(this),
+			);
+		}
+
+		_syncVisibility() {
+			const { isLocked } = Main.sessionMode;
+			const nSliders = this._slidersSection.numMenuItems;
+			this._button.visible = !isLocked && (this.menu.isOpen || nSliders > 0);
+		}
+
+		_slider_added(slider: ApplicationVolumeSlider) {
+			const slider_item = new ApplicationVolumeSliderItem(slider);
+			slider._item = slider_item;
+			this._slidersSection.addMenuItem(slider_item);
+
+			this._syncVisibility();
+		}
+
+		_slider_removed(slider: ApplicationVolumeSlider) {
+			this._slidersSection.box.remove_child(slider._item);
+			this._slidersSection.disconnect_object(slider._item);
+			this._syncVisibility();
+		}
+
+		override destroy() {
+			this._slider_manager.destroy();
+			Main.sessionMode.disconnectObject(this);
+
+			delete this._output_slider._qsap_applications_button;
+			this._button.destroy();
+
+			this.menu.disconnectObject(this);
+			// also removes the menu from `this._menu_manager`
+			this.menu.destroy();
 
 			super.destroy();
 		}

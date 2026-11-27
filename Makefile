@@ -19,7 +19,7 @@ node_modules: package.json
 	touch node_modules
 
 resources/po/example.pot: $(JS_FILES)
-	xgettext --no-git --from-code=UTF-8 --output=resources/po/example.pot $(OUTPUT_DIR)/*.js
+	xgettext --no-git --from-code=UTF-8 --output=resources/po/example.pot $(OUTPUT_DIR)/*.js $(OUTPUT_DIR)/libs/*.js
 
 $(JS_FILES) &: node_modules $(TS_FILES) $(LIBPANEL_FILES)
 	npm update libpanel

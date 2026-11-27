@@ -140,6 +140,21 @@ export default class QSAPPreferences extends ExtensionPreferences {
 				'<span color="darkorange" weight="bold">This will disable the ability to change the output device per application</span>',
 			),
 		});
+		const applications_volume_sliders_submenu_button = applications_volume_sliders_group.add_switch(
+			"applications-volume-sliders-submenu-button",
+			{
+				title: _("Open the submenu from the output volume slider"),
+				subtitle: _(
+					"Instead of a separate item, add a button next to the output device chooser to open the submenu",
+				),
+			},
+		);
+		settings.bind(
+			"group-applications-volume-sliders",
+			applications_volume_sliders_submenu_button,
+			"sensitive",
+			Gio.SettingsBindFlags.DEFAULT,
+		);
 		applications_volume_sliders_group.add_switch("combine-applications-volume-sliders", {
 			title: _("Combine streams from the same application"),
 			subtitle: _(
